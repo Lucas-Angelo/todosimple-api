@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.lucasangelo.todosimple.models.Task;
+import com.lucasangelo.todosimple.models.projection.TaskProjection;
 import com.lucasangelo.todosimple.services.TaskService;
 
 @RestController
@@ -36,13 +37,12 @@ public class TaskController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<List<Task>> findAllByUser() {
-        List<Task> objs = this.taskService.findAllByUser();
+    public ResponseEntity<List<TaskProjection>> findAllByUser() {
+        List<TaskProjection> objs = this.taskService.findAllByUser();
         return ResponseEntity.ok().body(objs);
     }
 
     @PostMapping
-    @Validated
     public ResponseEntity<Void> create(@Valid @RequestBody Task obj) {
         this.taskService.create(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -51,7 +51,6 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    @Validated
     public ResponseEntity<Void> update(@Valid @RequestBody Task obj, @PathVariable Long id) {
         obj.setId(id);
         this.taskService.update(obj);

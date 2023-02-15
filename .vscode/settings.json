@@ -1,4 +1,5 @@
 {
-  "terminal.integrated.defaultProfile.windows": "Command Prompt",
-  "java.configuration.updateBuildConfiguration": "interactive"
+  "terminal.integrated.defaultProfile.windows": "GitBash",
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "java.compile.nullAnalysis.mode": "automatic"
 }

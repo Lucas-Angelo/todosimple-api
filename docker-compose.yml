@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  mysqldb:
+    image: mysql:5.7
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQLDB_DATABASE
+    ports:
+      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+    volumes:
+      - mysqlvolume:/var/lib/mysql
+  app:
+    depends_on:
+      - mysqldb
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    working_dir: /usr/src/todosimpleapp
+    container_name: todosimpleapp
+    restart: on-failure
+    env_file: ./.env
+    ports:
+      - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:$MYSQLDB_DOCKER_PORT/$MYSQLDB_DATABASE?useSSL=false&createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=$MYSQLDB_USER
+      - SPRING_DATASOURCE_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+    volumes:
+      - .m2:/root/.m2
+    stdin_open: true
+    tty: true
+
+volumes:
+  mysqlvolume:

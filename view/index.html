@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ToDo Simple App</title>
-    <script src="script.js"></script>
+    <script src="./scripts/script.js"></script>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -17,7 +17,17 @@
     <div class="d-flex justify-content-center">
       <div class="spinner-border" role="status" id="loading"></div>
     </div>
-    <p class="h1 text-center">Tarefas de um usuário</p>
+
+    <div class="d-flex">
+      <p class="h1 text-center flex-grow-1">Suas tarefas</p>
+      <button
+        type="button"
+        class="btn btn-outline-dark text-left"
+        onclick="localStorage.removeItem('Authorization'); window.location = '/view/login.html'"
+      >
+        SignOut
+      </button>
+    </div>
 
     <table class="table table-hover">
       <tbody id="tasks"></tbody>

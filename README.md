@@ -58,6 +58,7 @@ Esta é uma simples aplicação onde usuário podem se cadastrar e registrarem t
   - [Visual Studio Code (VSCode)](https://code.visualstudio.com)
   - [Postman](http://www.postman.com/downloads/)
   - [Git](https://git-scm.com/downloads)
+  - [Docker](https://docs.docker.com/desktop/install/windows-install/)
 
 ---
 
@@ -70,6 +71,7 @@ Pré-requisitos:
   - Java
   - Maven
   - MySQL
+  - Docker (Docker-Compose)
 
 <br>
 
@@ -80,22 +82,19 @@ Pré-requisitos:
 
 <br>
 
-- Passo 2: Configurar o API Spring Boot (backend)
+- Passo 2: Configurar e iniciar a API Spring Boot (backend)
 
   - Passo 2.1: Entrar no arquivo application.properties:
   ```bash
-  $ vi PLF-ES-2022-2-MON-CursoAPIJava\src\main\resources\application.properties
+  $ vi PLF-ES-2022-2-MON-CursoAPIJava\src\main\resources\application-dev.properties
   ```
 
   - Passo 2.2: Configurar as credenciais de banco de dados de acordo com sua instalação do MySQL Server:
   ```proprieties
   # Database config
-  spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
   spring.datasource.url=jdbc:mysql://localhost:3306/todosimple?createDatabaseIfNotExist=true
   spring.datasource.username=root
   spring.datasource.password=root
-  spring.jpa.hibernate.ddl-auto=update
-  spring.jpa.show-sql=true
   ```
 
   - Passo 2.3: Voltar para a pasta raíz do projeto:
@@ -103,14 +102,21 @@ Pré-requisitos:
   $ cd PLF-ES-2022-2-MON-CursoAPIJava\
   ```
 
-  - Passo 2.4: Abrir o terminal e instalar as dependências do projeto utilizando o Maven:
+  - Passo 2.4: Iniciar a aplicação Spring Boot:
   ```bash
   $ mvn clean install
   ```
-
-  - Passo 2.4: Iniciar a aplicação Spring Boot utilizando o Maven:
+  
+    - Passo 2.4.1: Iniciar a aplicação Spring Boot utilizando o Maven:
   ```bash
   $ mvn spring-boot:run
+  ```
+
+    ou
+
+    - Passo 2.4.1: Iniciar a aplicação utilizando Docker-Compose:
+  ```bash
+  $ docker-compose up
   ```
 
   - API estará rodando em http://localhost:8080/
@@ -126,10 +132,10 @@ Pré-requisitos:
 
   - Passo 3.2: Abrir o arquivo index.html diretamente ou pela extensão Live Server do VsCode:
   ```bash
-  $ cd PLF-ES-2022-2-MON-CursoAPIJava\view\index.html
+  $ cd PLF-ES-2022-2-MON-CursoAPIJava\view\login.html
   ```
 
-  - Frontend estará rodando em http://127.0.0.1:5500/view/index.html caso iniciado com Live Server.
+  - Frontend estará rodando em http://127.0.0.1:5500/view/login.html caso iniciado com Live Server.
 
 ---
 

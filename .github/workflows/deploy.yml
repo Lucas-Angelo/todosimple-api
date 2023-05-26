@@ -1,0 +1,60 @@
+name: Deploy
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  todosimpleapp-deploy:
+    name: Deploy | Docker-compose
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Copy ToDoSimpleApp to VPS
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          # Github path
+          source: "**"
+          # VPS path
+          target: "~/todosimpleapp"
+
+      - name: Create ToDoSimpleApp .env file
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/todosimpleapp
+            rm .env
+            touch .env
+            echo MYSQLDB_USER=${{ secrets.MYSQLDB_USER }} >> .env
+            echo MYSQLDB_ROOT_PASSWORD=${{ secrets.MYSQLDB_ROOT_PASSWORD }} >> .env
+            echo MYSQLDB_DATABASE=${{ secrets.MYSQLDB_DATABASE }} >> .env
+            echo MYSQLDB_LOCAL_PORT=${{ secrets.MYSQLDB_LOCAL_PORT }} >> .env
+            echo MYSQLDB_DOCKER_PORT=${{ secrets.MYSQLDB_DOCKER_PORT }} >> .env
+            echo SPRING_LOCAL_PORT=${{ secrets.SPRING_LOCAL_PORT }} >> .env
+            echo SPRING_DOCKER_PORT=${{ secrets.SPRING_DOCKER_PORT }} >> .env
+
+      - name: Build and Start Docker-compose
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/todosimpleapp
+            docker-compose build --no-cache app
+            docker-compose up -d app
